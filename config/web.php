@@ -51,7 +51,7 @@ $config = [
             'rules' => [
 
                 '' => 'site/index',
-                '<_a:about|contact|signup|login>' => 'site/<_a>',
+                '<_a:about|contact|auth|login>' => 'site/<_a>',
                 '<_c:[\w\-]+>' => '<_c>/index',
                 '<_c:[\w\-]+>/<id:\d+>' => '<_c>/view',
                 '<_c:[\w\-]+>/<_a:[\w-]+>' => '<_c>/<_a>',

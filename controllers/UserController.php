@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\User;
 use app\models\UserSearch;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -19,7 +20,15 @@ class UserController extends Controller
      */
     public function behaviors()
     {
-        return [
+        return ['access' => [
+            'class' => \yii\filters\AccessControl::className(),
+            'rules' => [
+                [
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+            ],
+        ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -85,9 +94,9 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+//        VarDumper::dump($model);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['profile']);
         }
 
         return $this->render('update', [
@@ -123,5 +132,14 @@ class UserController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionProfile() {
+        $id = Yii::$app->user->identity->id;
+        return $this->actionView($id);
+    }
+    public function actionProfileUpdate() {
+        $id = Yii::$app->user->identity->id;
+        return $this->actionUpdate($id);
     }
 }
